@@ -19,10 +19,10 @@ def apply_gravity():
     Applique la gravité au Doodle en augmentant progressivement sa vitesse verticale (vel_y).
     Met à jour la position verticale (y) du Doodle.
     """
-    # TODO : Mettez à jour la vitesse verticale puis la position verticale
+    # Mettez à jour la vitesse verticale puis la position verticale
     # du Doodle à partir de GRAVITY.
-    doodle_dict["vel_y"]+= GRAVITY
-    doodle_dict["y"]+= doodle_dict["vel_y"]
+    doodle_dict["vel_y"]+= GRAVITY #applique la gravité au Doodle en augmentant progressivement sa vitesse verticale (vel_y)
+    doodle_dict["y"]+= doodle_dict["vel_y"] #met à jour la position y du Doodle selon la nouvelle vitesse
     return
 
 # ===========================================================
@@ -87,6 +87,7 @@ def check_platform_collisions():
     Le rebond ne se produit QUE lorsque le Doodle descend (vel_y > 0)
     et qu'il arrive sur le dessus d'une plateforme.
     """
+   
     # TODO : Implémentez la détection d'un atterrissage.
     #
     # Contraintes :
@@ -100,6 +101,31 @@ def check_platform_collisions():
     # - spring : SPRING_JUMP_VELOCITY ;
     # - brown : JUMP_VELOCITY puis désactivation de la plateforme ;
     # - green/blue : JUMP_VELOCITY.
+    for platform in PLATFORMS:
+        if doodle_dict["vel_y"] > 0: # vérifie que Doodle descend (va vers le bas)
+            #crée les rectangles du Doodle et des plateformes selon leurs caractéristiques
+            doodle_rect = pygame.Rect( 
+                doodle_dict["x"],
+                doodle_dict["y"],
+                DOODLE_WIDTH,
+                DOODLE_HEIGHT
+            )
+            platform_rect = pygame.Rect(
+                platform["x"],
+                platform["y"],
+                platform["width"],
+                platform["height"]
+            )
+            if rects_collide(doodle_rect, platform_rect): #vérifie si doodle et la plateforme se touchent
+                pieds_actuels = doodle_dict["y"] + DOODLE_HEIGHT #calcule la position des pieds sur la plateforme
+                #doodle_dict["y"]: "tête" du Doodle (coin supérieur gauche de son rectangle), en additionnant avec DOODLE_HEIGHT: donne position de ses pieds 
+                pieds_avant = pieds_actuels - doodle_dict["vel_y"] #retire le déplacement causé par la vitesse pour retrouver position précédente des pieds 
+
+                if (platform["y"] -14 <= pieds_actuels <= platform["y"] + 14) and pieds_avant <= platform["y"]: #vérifie si Doodle est actuellement dans les bornes acceptées de distance de la plateforme ET s'il était au dessus de la plateforme avant
+                    #platform["y"] - 14: max, platform["y"] + 14: min
+                    doodle_dict["vel_y"] = JUMP_VELOCITY #donne la vitesse initiale pour son saut 
+                        
+                             
 
     return
 
