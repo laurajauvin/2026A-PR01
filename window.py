@@ -35,8 +35,8 @@ def generate_initial_platforms():
     )
     PLATFORMS.append(start_platform)
 
-    current_y = DOODLE_START_Y + 70 - random.randint(MIN_PLATFORM_GAP, MAX_PLATFORM_GAP)
     current_x = random.randint(0, SCREEN_WIDTH - PLATFORM_WIDTH)
+    current_y = DOODLE_START_Y + 70 - random.randint(MIN_PLATFORM_GAP, MAX_PLATFORM_GAP)
     
     green_prob = 65/100
     blue_prob = 17/100
@@ -46,20 +46,33 @@ def generate_initial_platforms():
         type_plateforme = choose_platform_type(green_prob,blue_prob,spring_prob)
         nouv_plateforme = create_platform(current_x,current_y,type_plateforme)
         PLATFORMS.append(nouv_plateforme)
-        current_y = current_y - random.randint(MIN_PLATFORM_GAP, MAX_PLATFORM_GAP)
         current_x = random.randint(0, SCREEN_WIDTH - PLATFORM_WIDTH)
+        current_y = current_y - random.randint(MIN_PLATFORM_GAP, MAX_PLATFORM_GAP)
 
-    # ======================== PARTIE 2.2 ========================
-    # TODO : Ajoutez des plateformes jusqu'à ce que la partie supérieure
-    # de l'écran soit remplie.
-    #
-    # À chaque itération, vous devrez notamment déterminer une position
-    # horizontale valide, choisir un type avec choose_platform_type(...),
-    # ajouter la plateforme à PLATFORMS et calculer la hauteur de la suivante.
-    # Les probabilités à utiliser sont données dans le README.
+    return PLATFORMS
 
-    return
-    # ===========================================================
+    """
+    * Les coordonnées (0,0) sont en haut à gauche complètement de l'écran
+
+    1. Ajout de current_x qui est une valeur entre 0 (gauche de l'écran)
+       et la largeur de l'écran (droite de l'écran) - la largeur de la plateforme
+    2. Ajout des probabilités de chaque couleur comme demandé
+    3. Boucle jusqu'à ce que la hauteur actuelle + la distance verticale minimum
+       entre chaque plateforme soit plus petite ou égale à 0 (haut de l'écran) car
+       en montant, y diminue
+    4. À l'intérieur de la boucle:
+       a) Choisir le type de plateforme avec la fonction choose_platform_type() et 
+          les probabilités de chaque couleur
+       b) Créer une nouvelle plateforme avec la fonction create_platform() contenant 
+          la valeur actuelle de x et y, puis le type de la plateforme choisi
+       c) On ajoute la nouvelle plateforme à la liste de plateforme
+       d) On met à jour la nouvelle valeur actuelle de x et y en recalculant 
+          complètement la valeur horizontale et en enlevant une épaisseur aléatoire
+          à de plateforme à l'ancienne valeur verticale pour que la prochaine
+          plateforme soit plus haute
+    5. On retourne la liste des plateformes
+
+    """
 
 
 def draw_window():
