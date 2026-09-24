@@ -67,6 +67,14 @@ def move_doodle():
 
 # ======================== PARTIE 2.3 ========================
 def move_platforms():
+    for plateforme in PLATFORMS: 
+        if plateforme["type"] == "blue":
+            while plateforme["y"] != SCREEN_HEIGHT - MIN_PLATFORM_GAP:
+                plateforme["x"] += (plateforme["vx"])*(SCREEN_WIDTH - PLATFORM_WIDTH - plateforme["x"])
+                if plateforme["x"] == SCREEN_WIDTH - PLATFORM_WIDTH:
+                    plateforme["x"] -= (plateforme["vx"])*(plateforme["x"])
+    return
+    
     """
     Déplace horizontalement les plateformes mobiles ("blue").
     Fait rebondir les plateformes lorsqu'elles atteignent les bords de la fenêtre.
@@ -74,8 +82,6 @@ def move_platforms():
     # TODO : Parcourez les plateformes et gérez le déplacement des plateformes
     # bleues encore actives. Elles doivent rester dans la fenêtre en inversant
     # leur vitesse lorsqu'elles atteignent un bord.
-
-    return
 
 # ===========================================================
 
