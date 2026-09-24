@@ -41,7 +41,7 @@ def create_platform(x, y, platform_type):
         "x": float(x),
         "y": float(y),
         "type": platform_type,    # Remplace "green" par platform_type pour que le type change selon la plateforme
-        "image": platform_images,  # Remplace "green" par platform_type 
+        "image": platform_images.keys(),  # Remplace plateform_image["green"] par platform_image 
         "vx": 0.0,                      
         "active": True,
         "width": PLATFORM_SIZE[0],
