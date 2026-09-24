@@ -28,7 +28,7 @@ platform_images = {
 
 
 # ======================== PARTIE 2.1 ========================
-def create_platform(x, y, platform_type="green"):
+def create_platform(x, y, platform_type):
     """
     Crée et retourne un dictionnaire représentant une plateforme.
 
@@ -40,14 +40,22 @@ def create_platform(x, y, platform_type="green"):
     platform = {
         "x": float(x),
         "y": float(y),
-        "type": "green",                    # TODO
-        "image": platform_images["green"],  # TODO
-        "vx": 0.0,                          # TODO
+        "type": platform_type,    # Remplace "green" par platform_type pour que le type change selon la plateforme
+        "image": platform_images,  # Remplace "green" par platform_type 
+        "vx": 0.0,                      
         "active": True,
         "width": PLATFORM_SIZE[0],
-        "height": PLATFORM_SIZE[1]           # TODO
+        "height": PLATFORM_SIZE[1]          
     }
+    
+    if platform_images == "blue": 
+        platform["vx"]= MOVING_PLATFORM_SPEED
+    if platform_images == "spring":
+        platform["height"] += 10
 
+    #if pour si la plateforme est bleue, sa vitesse horizontale correspond à MOVING_PLATFORM_SPEED
+    #if pour si la plateforme est un spring, sa on ajoute 10px à sa hauteur
+        
     # TODO : Modifiez le dictionnaire ci-dessus pour qu'il dépende réellement
     # de l'argument platform_type.
     #
