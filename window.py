@@ -36,6 +36,18 @@ def generate_initial_platforms():
     PLATFORMS.append(start_platform)
 
     current_y = DOODLE_START_Y + 70 - random.randint(MIN_PLATFORM_GAP, MAX_PLATFORM_GAP)
+    current_x = random.randint(0, SCREEN_WIDTH - PLATFORM_WIDTH)
+    
+    green_prob = 65/100
+    blue_prob = 17/100
+    spring_prob = 10/100
+
+    while (current_y +  MIN_PLATFORM_GAP) > 0:
+        type_plateforme = choose_platform_type(green_prob,blue_prob,spring_prob)
+        nouv_plateforme = create_platform(current_x,current_y,type_plateforme)
+        PLATFORMS.append(nouv_plateforme)
+        current_y = current_y - random.randint(MIN_PLATFORM_GAP, MAX_PLATFORM_GAP)
+        current_x = random.randint(0, SCREEN_WIDTH - PLATFORM_WIDTH)
 
     # ======================== PARTIE 2.2 ========================
     # TODO : Ajoutez des plateformes jusqu'à ce que la partie supérieure
