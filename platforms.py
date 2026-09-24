@@ -28,7 +28,7 @@ platform_images = {
 
 
 # ======================== PARTIE 2.1 ========================
-def create_platform(x, y, platform_type="green"):
+def create_platform(x, y, platform_type):
     """
     Crée et retourne un dictionnaire représentant une plateforme.
 
@@ -40,14 +40,22 @@ def create_platform(x, y, platform_type="green"):
     platform = {
         "x": float(x),
         "y": float(y),
-        "type": "green",                    # TODO
-        "image": platform_images["green"],  # TODO
-        "vx": 0.0,                          # TODO
+        "type": platform_type,    # Remplace "green" par platform_type pour que le type change selon la plateforme
+        "image": platform_images[platform_type],  # Remplace plateform_image["green"] par platform_image[plateform_type]
+        "vx": 0.0,                      
         "active": True,
         "width": PLATFORM_SIZE[0],
-        "height": PLATFORM_SIZE[1]           # TODO
+        "height": PLATFORM_SIZE[1]          
     }
+    
+    if platform_images == "blue": 
+        platform["vx"]= MOVING_PLATFORM_SPEED
+    if platform_images == "spring":
+        platform["height"] += 10
 
+    #if pour si la plateforme est bleue, sa vitesse horizontale correspond à MOVING_PLATFORM_SPEED
+    #if pour si la plateforme est un spring, sa on ajoute 10px à sa hauteur
+        
     # TODO : Modifiez le dictionnaire ci-dessus pour qu'il dépende réellement
     # de l'argument platform_type.
     #
@@ -64,22 +72,35 @@ def create_platform(x, y, platform_type="green"):
 
 # ======================== PARTIE 2.2 ========================
 def choose_platform_type(green_probability, blue_probability, spring_probability):
-    """
-    Choisit aléatoirement un type de plateforme.
+    nombre = random.random()
+    if nombre <= green_probability:
+        return "green"
+    elif nombre <= green_probability + blue_probability:
+        return "blue"
+    elif nombre <= green_probability + blue_probability + spring_probability:
+        return "spring"
+    else:
+        return "brown"
 
-    Les trois paramètres donnent les probabilités respectives des plateformes
-    verte, bleue et à ressort. La probabilité restante correspond à une
-    plateforme marron.
+    """
+    Question pour la Prof: Est-ce qu'on inclut la probabilité de chaque dans le premier interval
+    ou dans le prochain?
     """
 
-    # TODO : Utilisez random.random() et les probabilités reçues en paramètres
-    # pour retourner l'une des chaînes suivantes :
-    # "green", "blue", "spring" ou "brown".
-    #
+    """
+    Description code:
+    1. random.random() donne un nombre entre 0 et 1
+    2. Si le nombre est entre 0 et la probabilité de la plateforme verte 
+       (incluant 0 et prob. verte), on retourne "green"
+    3. Si le nombre est entre la probabilité de la plateforme verte et celle de la bleue 
+       (excluant prob. verte et incluant prob.bleue), on retourne "blue"
+    4. Si le nombre est entre la probabilité de la plateforme bleue et celle de la spring 
+       (excluant prob. bleue et incluant prob. spring), on retourne "spring"
+    5. Sinon, (le nombre est plus grand grand que les trois premières probabilités réunies), 
+       on retourne "brown"
+    """
     # Attention : les seuils utilisés avec random.random() doivent être
     # cumulatifs.
-
-    return "green"  # Valeur temporaire à remplacer
 
 # ===========================================================
 
