@@ -54,10 +54,10 @@ def move_doodle():
     # N'utilisez pas de dimensions numériques écrites directement.
 
     if doodle_dict["x"] < - DOODLE_WIDTH: #si le doodle est complètement sorti à gauche (-60), 
-        doodle_dict["x"] = SCREEN_WIDTH   #le met à la position SCREEN_WIDTH (576)
+        doodle_dict["x"] = SCREEN_WIDTH   #le remet à la droite (position SCREEN_WIDTH (576))
 
-    elif doodle_dict["x"] > SCREEN_WIDTH:
-        doodle_dict["x"] = -DOODLE_WIDTH
+    elif doodle_dict["x"] > SCREEN_WIDTH: #si le doodle est complètement sorti à droite (576),
+        doodle_dict["x"] = -DOODLE_WIDTH #le remet à la gauche (position -DOODLE_WIDTH (-60))
         
 
     return
@@ -108,7 +108,7 @@ def check_platform_collisions():
     # - brown : JUMP_VELOCITY puis désactivation de la plateforme ;
     # - green/blue : JUMP_VELOCITY.
     for platform in PLATFORMS:
-        if doodle_dict["vel_y"] > 0: # vérifie que Doodle descend (va vers le bas)
+        if platform["active"] and doodle_dict["vel_y"] > 0: # vérifie que Doodle descend (va vers le bas)
             #crée les rectangles du Doodle et des plateformes selon leurs caractéristiques
             doodle_rect = pygame.Rect( 
                 doodle_dict["x"],
@@ -129,11 +129,19 @@ def check_platform_collisions():
 
                 if (platform["y"] -14 <= pieds_actuels <= platform["y"] + 14) and pieds_avant <= platform["y"]: #vérifie si Doodle est actuellement dans les bornes acceptées de distance de la plateforme ET s'il était au dessus de la plateforme avant
                     #platform["y"] - 14: max, platform["y"] + 14: min
-                    doodle_dict["vel_y"] = JUMP_VELOCITY #donne la vitesse initiale pour son saut 
-                        
-                             
+                    if platform["type"] == "spring":
+                        doodle_dict["vel_y"] = SPRING_JUMP_VELOCITY
 
-    return
+                    elif platform["type"] == "brown":
+                        doodle_dict["vel_y"] = JUMP_VELOCITY
+                        platform["active"] = False # quand la plateforme est brown, elle deient inactive après avoir appliqué JUMP_VELOCITY
+
+                    else: # si la plateform est green ou blue, donne la vélocité de base
+                        doodle_dict["vel_y"] = JUMP_VELOCITY 
+
+                    return # permet qu'un seul rebond soit traité par appel de la fonction
+                            # évite que le Doodle rebondisse sur plusieurs plateformes en même temps s’il est en collision avec plusieurs
+
 
 # ===========================================================
 
