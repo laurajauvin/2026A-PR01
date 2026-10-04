@@ -94,7 +94,7 @@ def check_platform_collisions():
     et qu'il arrive sur le dessus d'une plateforme.
     """
    
-    # TODO : Implémentez la détection d'un atterrissage.
+    # Implémentez la détection d'un atterrissage.
     #
     # Contraintes :
     # - aucun rebond pendant la montée ;
@@ -126,8 +126,8 @@ def check_platform_collisions():
                 pieds_actuels = doodle_dict["y"] + DOODLE_HEIGHT #calcule la position des pieds sur la plateforme
                 #doodle_dict["y"]: "tête" du Doodle (coin supérieur gauche de son rectangle), en additionnant avec DOODLE_HEIGHT: donne position de ses pieds 
                 pieds_avant = pieds_actuels - doodle_dict["vel_y"] #retire le déplacement causé par la vitesse pour retrouver position précédente des pieds 
-
-                if (platform["y"] -14 <= pieds_actuels <= platform["y"] + 14) and pieds_avant <= platform["y"]: #vérifie si Doodle est actuellement dans les bornes acceptées de distance de la plateforme ET s'il était au dessus de la plateforme avant
+                
+                if (platform["y"] -14 <= pieds_actuels <= platform["y"] + 14) and pieds_avant <= platform["y"] + 14: #vérifie si Doodle est actuellement dans les bornes acceptées de distance de la plateforme ET s'il était au dessus de la plateforme avant
                     #platform["y"] - 14: max, platform["y"] + 14: min
                     if platform["type"] == "spring":
                         doodle_dict["vel_y"] = SPRING_JUMP_VELOCITY
