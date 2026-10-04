@@ -55,18 +55,6 @@ def create_platform(x, y, platform_type):
 
     return platform
 
-    #if pour si la plateforme est bleue, sa vitesse horizontale correspond à MOVING_PLATFORM_SPEED
-    #if pour si la plateforme est un spring, sa on ajoute 10px à sa hauteur
-        
-    # TODO : Modifiez le dictionnaire ci-dessus pour qu'il dépende réellement
-    # de l'argument platform_type.
-    #
-    # Contraintes :
-    # - l'image doit être obtenue à partir de platform_images ;
-    # - une plateforme bleue se déplace à MOVING_PLATFORM_SPEED ;
-    # - une plateforme à ressort est 10 pixels plus haute ;
-    # - les autres plateformes sont immobiles et gardent la hauteur normale.
-
 # ===========================================================
 
 

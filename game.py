@@ -67,24 +67,21 @@ def move_doodle():
 
 # ======================== PARTIE 2.3 ========================
 def move_platforms():
-    for plateforme in PLATFORMS: 
-        if plateforme["type"] == "blue":
-            plateforme["x"] += (plateforme["vx"])
-            if plateforme["x"] >= SCREEN_WIDTH - PLATFORM_WIDTH:
-                (plateforme["vx"]) = -(plateforme["vx"])
-                plateforme["x"] = SCREEN_WIDTH - PLATFORM_WIDTH
-            if plateforme["x"] <= 0:
-                (plateforme["vx"]) = -(plateforme["vx"])
-                plateforme["x"] = 0
+    for platform in PLATFORMS: 
+        if platform["type"] == "blue":
+            platform["x"] += (platform["vx"])
+            if platform["x"] >= SCREEN_WIDTH - PLATFORM_WIDTH:
+                (platform["vx"]) = -(platform["vx"])
+                platform["x"] = SCREEN_WIDTH - PLATFORM_WIDTH
+            if platform["x"] <= 0:
+                (platform["vx"]) = -(platform["vx"])
+                platform["x"] = 0
     return
     
     """
     Déplace horizontalement les plateformes mobiles ("blue").
     Fait rebondir les plateformes lorsqu'elles atteignent les bords de la fenêtre.
     """
-    # TODO : Parcourez les plateformes et gérez le déplacement des plateformes
-    # bleues encore actives. Elles doivent rester dans la fenêtre en inversant
-    # leur vitesse lorsqu'elles atteignent un bord.
 
 # ===========================================================
 
@@ -166,14 +163,44 @@ def generate_new_platforms():
     Génère de nouvelles plateformes au-dessus du haut de l'écran pour maintenir
     un flux continu lorsque la caméra défile.
     """
-    # TODO : Complétez cette fonction en vous inspirant de la logique de
-    # génération initiale, sans la recopier inutilement.
-    #
-    # Vous devrez partir de la plateforme actuellement la plus haute et
-    # continuer à ajouter des plateformes tant que nécessaire. Utilisez
-    # choose_platform_type(...) avec les probabilités indiquées dans le README.
 
-    return
+    # Changement de probabilité pour qu'elles correspondent aux contraintes des nouvelles plateformes
+    green_prob = 55/100
+    blue_prob = 20/100
+    spring_prob = 13/100
+
+    """ Assignation d'une coordonnée y de base pour highest_platform au bas de l'écran pour que n'importe 
+        quelle plateforme soit plus haute """
+
+    highest_platform = {"x" : SCREEN_WIDTH/2, "y": SCREEN_HEIGHT} 
+
+
+    """ for loop pour déterminer la plateforme la plus haute en comparant la coordonnée y de la plateforme
+        précédente de la loop avec la nouvelle """
+    
+    for platform in PLATFORMS:
+        if platform["y"] < highest_platform["y"]:
+            highest_platform = platform
+
+    """ Assignation des coordonnées de base de x et y à celles de la plateforme la plus haute """
+    
+    current_x = highest_platform["x"]
+    current_y = highest_platform["y"]
+
+    """ Utilisation de la logique de la section 2.2 (créer les plateformes initiales). La seule chose modifiée
+        est l'ordre: on assigne une nouvelle valeur aléatoire à current_x et current_y avant d'ajouter la 
+        nouvelle plateforme à la liste pour ne pas créer une plateforme par dessus highest_platform"""
+
+    while (current_y +  MIN_PLATFORM_GAP) > 0:
+        current_x = random.randint(0, SCREEN_WIDTH - PLATFORM_WIDTH)
+        current_y = current_y - random.randint(MIN_PLATFORM_GAP, MAX_PLATFORM_GAP)
+        type_platform = choose_platform_type(green_prob,blue_prob,spring_prob)
+        nouv_platform = create_platform(current_x,current_y,type_platform)
+        PLATFORMS.append(nouv_platform)
+
+    return PLATFORMS
+
+    # Retourner la nouvelle liste de plateforme créée à mesure que les plateformes descendent
 
 # ===========================================================
 
