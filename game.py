@@ -68,11 +68,11 @@ def move_doodle():
 # ======================== PARTIE 2.3 ========================
 def move_platforms():
     for platform in PLATFORMS: 
-        if platform["type"] == "blue":
+        if platform["type"] == "blue" and platform["active"]:
             platform["x"] += (platform["vx"])
-            if platform["x"] >= SCREEN_WIDTH - PLATFORM_WIDTH:
+            if platform["x"] >= SCREEN_WIDTH - platform["width"]:
                 (platform["vx"]) = -(platform["vx"])
-                platform["x"] = SCREEN_WIDTH - PLATFORM_WIDTH
+                platform["x"] = SCREEN_WIDTH - platform["width"]
             if platform["x"] <= 0:
                 (platform["vx"]) = -(platform["vx"])
                 platform["x"] = 0
