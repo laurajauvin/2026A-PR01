@@ -152,7 +152,7 @@ def scroll_camera():
     Fait défiler le monde lorsque le Doodle dépasse CAMERA_SCROLL_THRESHOLD.
     Met à jour le score et maintient les plateformes visibles.
     """
-    # TODO : Lorsque le Doodle dépasse le seuil de caméra, il doit rester
+    # Lorsque le Doodle dépasse le seuil de caméra, il doit rester
     # visuellement au seuil pendant que les plateformes sont déplacées vers
     # le bas de la même distance.
     #
@@ -160,7 +160,27 @@ def scroll_camera():
     # meilleur score doit être mis à jour. Les plateformes sorties sous
     # l'écran doivent être retirées, puis de nouvelles plateformes générées.
 
+    if doodle_dict["y"] < CAMERA_SCROLL_THRESHOLD: #lorsque le doodle est plus haut que le seuil de caméra
+        defilement = CAMERA_SCROLL_THRESHOLD - doodle_dict["y"] #calcule distance de défilement nécessaire pour prochaines étapes
+
+        doodle_dict["y"] = CAMERA_SCROLL_THRESHOLD #repositionne le doodle au seuil de caméra
+        doodle_dict["score"] += defilement # mise à jour du score selon le défilement vertical
+        
+        if doodle_dict["score"] > doodle_dict["high_score"]: # si le score est plus grand que high score, 
+            doodle_dict["high_score"] = doodle_dict["score"] # high score est mis à jour
+        
+                
+        for platform in PLATFORMS:
+            platform["y"] += defilement #fait descendre toutes les plateformes de la distance de défilement 
+
+        PLATFORMS[:] = [platform for platform in PLATFORMS if platform["y"] < SCREEN_HEIGHT] # on veut enlever les platformes qui sont en dessous de SCREEN_HEIGHT,
+        # copie ce contenu dans la liste originale PLATFORMS sans en créer une nouvelle      # donc on garde celles qui sont au-dessus de SCREEN_HEIGHT
+
+        generate_new_platforms() #on appelle la fonction qui va générer de nouvelles plateformes au-dessus de l'écran
+
     return
+
+
 
 # ===========================================================
 
