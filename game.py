@@ -66,22 +66,22 @@ def move_doodle():
 
 
 # ======================== PARTIE 2.3 ========================
-def move_platforms():
-    for platform in PLATFORMS: 
-        if platform["type"] == "blue" and platform["active"]:
-            platform["x"] += (platform["vx"])
-            if platform["x"] >= SCREEN_WIDTH - platform["width"]:
-                (platform["vx"]) = -(platform["vx"])
-                platform["x"] = SCREEN_WIDTH - platform["width"]
-            if platform["x"] <= 0:
-                (platform["vx"]) = -(platform["vx"])
-                platform["x"] = 0
-    return
-    
     """
     Déplace horizontalement les plateformes mobiles ("blue").
     Fait rebondir les plateformes lorsqu'elles atteignent les bords de la fenêtre.
     """
+
+def move_platforms():
+    for platform in PLATFORMS:      #For loop pour parcour les plateformes
+        if platform["type"] == "blue" and platform["active"]:   #Si la plateform est bleue et active
+            platform["x"] += (platform["vx"])   #Elle se déplace selon sa vitesse
+            if platform["x"] >= SCREEN_WIDTH - platform["width"]:   #Si la plateforme dépasse la droite de l'écran (screen width - platform["width"])
+                (platform["vx"]) = -(platform["vx"])    #On inverse la vitesse pour qu'elle se déplace dans l'autre sens (vers la gauche)
+                platform["x"] = SCREEN_WIDTH - platform["width"]    #On ajuste la coordonnée en x de la plateforme pour qu'elle s'arrête à la droite de l'écran (sans la dépasser)
+            if platform["x"] <= 0:  #Si la plateforme dépasse la gauche de l'écran (0)
+                (platform["vx"]) = -(platform["vx"])    #On inverse la vitesse pour qu'elle se déplace dans l'autre sens (vers la droite)
+                platform["x"] = 0   #On ajuste la coordonnée en x de la plateforme pour qu'elle s'arrête à la gauche de l'écran (sans la dépasser)
+    return
 
 # ===========================================================
 
@@ -93,20 +93,7 @@ def check_platform_collisions():
     Le rebond ne se produit QUE lorsque le Doodle descend (vel_y > 0)
     et qu'il arrive sur le dessus d'une plateforme.
     """
-   
-    # Implémentez la détection d'un atterrissage.
-    #
-    # Contraintes :
-    # - aucun rebond pendant la montée ;
-    # - ignorer les plateformes inactives ;
-    # - utiliser rects_collide(...) pour le chevauchement des rectangles ;
-    # - un simple chevauchement ne suffit pas : le Doodle doit arriver par
-    #   le dessus de la plateforme. Pour le vérifier, comparez la position
-    #   actuelle de ses pieds à leur position approximative à l'image
-    #   précédente à l'aide de vel_y. Une tolérance de 14 pixels est permise ;
-    # - spring : SPRING_JUMP_VELOCITY ;
-    # - brown : JUMP_VELOCITY puis désactivation de la plateforme ;
-    # - green/blue : JUMP_VELOCITY.
+
     for platform in PLATFORMS:
         if platform["active"] and doodle_dict["vel_y"] > 0: # vérifie que Doodle descend (va vers le bas)
             #crée les rectangles du Doodle et des plateformes selon leurs caractéristiques

@@ -48,11 +48,12 @@ def create_platform(x, y, platform_type):
         "height": PLATFORM_SIZE[1]          
     }
     
-    if platform_type == "blue": 
-        platform["vx"]= MOVING_PLATFORM_SPEED
-    if platform_type == "spring":
-        platform["height"] += 10
+    if platform_type == "blue":     #Si la plateforme est bleue, sa vitesse horizontale correspond à MOVING_PLATFORM_SPEED
+        platform["vx"]= MOVING_PLATFORM_SPEED 
 
+    if platform_type == "spring":    #Si la plateforme est un spring, sa on ajoute 10px à sa hauteur
+        platform["height"] += 10
+        
     return platform
 
 # ===========================================================
