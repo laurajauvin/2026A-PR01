@@ -48,11 +48,12 @@ def create_platform(x, y, platform_type):
         "height": PLATFORM_SIZE[1]          
     }
     
-    if platform_type == "blue": 
-        platform["vx"]= MOVING_PLATFORM_SPEED
-    if platform_type == "spring":
-        platform["height"] += 10
+    if platform_type == "blue":     #Si la plateforme est bleue, sa vitesse horizontale correspond à MOVING_PLATFORM_SPEED
+        platform["vx"]= MOVING_PLATFORM_SPEED 
 
+    if platform_type == "spring":    #Si la plateforme est un spring, sa on ajoute 10px à sa hauteur
+        platform["height"] += 10
+        
     return platform
 
 # ===========================================================
@@ -71,11 +72,6 @@ def choose_platform_type(green_probability, blue_probability, spring_probability
         return "brown"
 
     """
-    Question pour la Prof: Est-ce qu'on inclut la probabilité de chaque dans le premier interval
-    ou dans le prochain?
-    """
-
-    """
     Description code:
     1. random.random() donne un nombre entre 0 et 1
     2. Si le nombre est entre 0 et la probabilité de la plateforme verte 
@@ -87,8 +83,6 @@ def choose_platform_type(green_probability, blue_probability, spring_probability
     5. Sinon, (le nombre est plus grand grand que les trois premières probabilités réunies), 
        on retourne "brown"
     """
-    # Attention : les seuils utilisés avec random.random() doivent être
-    # cumulatifs.
 
 # ===========================================================
 
