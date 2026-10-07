@@ -15,7 +15,7 @@ doodle_right_img = pygame.transform.scale(doodle_right_img, DOODLE_SIZE)
 
 # Initialisation du dictionnaire global du Doodle
 doodle_dict.update({
-    "x": DOODLE_START_X,
+    "x": DOODLE_START_X, #position de départ du Doodle (au-dessus de la plateforme verte)
     "y": DOODLE_START_Y,
     "vel_y": 0.0,
     "direction": "right",  # "left" ou "right"

@@ -19,9 +19,9 @@ def apply_gravity():
     Applique la gravité au Doodle en augmentant progressivement sa vitesse verticale (vel_y).
     Met à jour la position verticale (y) du Doodle.
     """
-    # Mettez à jour la vitesse verticale puis la position verticale
-    # du Doodle à partir de GRAVITY.
+   
     doodle_dict["vel_y"]+= GRAVITY #applique la gravité au Doodle en augmentant progressivement sa vitesse verticale (vel_y)
+                                   #donc le doodle monte de moins en moins vite
     doodle_dict["y"]+= doodle_dict["vel_y"] #met à jour la position y du Doodle selon la nouvelle vitesse
     return
 
@@ -34,27 +34,27 @@ def move_doodle():
     Gère le déplacement horizontal du Doodle selon les touches pressées (Flèches ou A/D).
     Implémente le passage fluide d'un côté de l'écran à l'autre (Screen Wrap).
     """
+
     keys = pygame.key.get_pressed()
 
-    # Gérez les déplacements gauche/droite et mettez à jour
-    # simultanément la direction et l'image du Doodle.
-    if keys[pygame.K_LEFT] or keys[pygame.K_a]:
-        doodle_dict["x"] -= DOODLE_SPEED
+    
+    if keys[pygame.K_LEFT] or keys[pygame.K_a]: #si joueur utilise flèche gauche ou touche a
+        doodle_dict["x"] -= DOODLE_SPEED #position horizontale de Doodle diminue de DOODLE_SPEED, donc va vers gauche
         doodle_dict["direction"] = "left"
-        doodle_dict["image"] = doodle_left_img
+        doodle_dict["image"] = doodle_left_img #image changée 
 
-    elif keys[pygame.K_RIGHT] or keys[pygame.K_d]:
-        doodle_dict["x"] += DOODLE_SPEED
+    elif keys[pygame.K_RIGHT] or keys[pygame.K_d]: #si joueur utilise flèche droite ou touche d
+        doodle_dict["x"] += DOODLE_SPEED # position horizontale augmente de DOODLE_SPEED, donc va à droite
         doodle_dict["direction"] = "right"
         doodle_dict["image"] = doodle_right_img
 
 
-    #Implémentez le Screen Wrap pour qu'une partie du Doodle puisse
+    #Implémente le Screen Wrap pour qu'une partie du Doodle puisse
     # sortir d'un côté avant de réapparaître de l'autre.
-    # N'utilisez pas de dimensions numériques écrites directement.
-
+    
+    #bord gauche du Doodle est à -60 quand complètement sorti à gauche
     if doodle_dict["x"] < - DOODLE_WIDTH: #si le doodle est complètement sorti à gauche (-60), 
-        doodle_dict["x"] = SCREEN_WIDTH   #le remet à la droite (position SCREEN_WIDTH (576))
+        doodle_dict["x"] = SCREEN_WIDTH   #le remet à la droite (position SCREEN_WIDTH (576)) de façon à ce qu'il entre progressivement
 
     elif doodle_dict["x"] > SCREEN_WIDTH: #si le doodle est complètement sorti à droite (576),
         doodle_dict["x"] = -DOODLE_WIDTH #le remet à la gauche (position -DOODLE_WIDTH (-60))
@@ -94,22 +94,11 @@ def check_platform_collisions():
     et qu'il arrive sur le dessus d'une plateforme.
     """
    
-    # Implémentez la détection d'un atterrissage.
-    #
-    # Contraintes :
-    # - aucun rebond pendant la montée ;
-    # - ignorer les plateformes inactives ;
-    # - utiliser rects_collide(...) pour le chevauchement des rectangles ;
-    # - un simple chevauchement ne suffit pas : le Doodle doit arriver par
-    #   le dessus de la plateforme. Pour le vérifier, comparez la position
-    #   actuelle de ses pieds à leur position approximative à l'image
-    #   précédente à l'aide de vel_y. Une tolérance de 14 pixels est permise ;
-    # - spring : SPRING_JUMP_VELOCITY ;
-    # - brown : JUMP_VELOCITY puis désactivation de la plateforme ;
-    # - green/blue : JUMP_VELOCITY.
+    # Implémente la détection d'un atterrissage.
+
     for platform in PLATFORMS:
         if platform["active"] and doodle_dict["vel_y"] > 0: # vérifie que Doodle descend (va vers le bas)
-            #crée les rectangles du Doodle et des plateformes selon leurs caractéristiques
+            #1) avec .Rect de pygame, crée les rectangles du Doodle et des plateformes selon leurs caractéristiques (x,y, largeur, hauteur)
             doodle_rect = pygame.Rect( 
                 doodle_dict["x"],
                 doodle_dict["y"],
@@ -128,13 +117,14 @@ def check_platform_collisions():
                 pieds_avant = pieds_actuels - doodle_dict["vel_y"] #retire le déplacement causé par la vitesse pour retrouver position précédente des pieds 
                 
                 if (platform["y"] -14 <= pieds_actuels <= platform["y"] + 14) and pieds_avant <= platform["y"] + 14: #vérifie si Doodle est actuellement dans les bornes acceptées de distance de la plateforme ET s'il était au dessus de la plateforme avant
-                    #platform["y"] - 14: max, platform["y"] + 14: min
+                    #bornes utiles car Doodle se déplace de plusieurs pixels entre deux frames donc serait difficile d'atterrir exactement sur plateforme
+                    #platform["y"] - 14: borne supérieure (le + haut), platform["y"] + 14: borne inféiruere (le + bas)
                     if platform["type"] == "spring":
                         doodle_dict["vel_y"] = SPRING_JUMP_VELOCITY
 
                     elif platform["type"] == "brown":
                         doodle_dict["vel_y"] = JUMP_VELOCITY
-                        platform["active"] = False # quand la plateforme est brown, elle deient inactive après avoir appliqué JUMP_VELOCITY
+                        platform["active"] = False # quand la plateforme est brown, elle devient inactive après avoir appliqué JUMP_VELOCITY
 
                     else: # si la plateform est green ou blue, donne la vélocité de base
                         doodle_dict["vel_y"] = JUMP_VELOCITY 
@@ -152,13 +142,7 @@ def scroll_camera():
     Fait défiler le monde lorsque le Doodle dépasse CAMERA_SCROLL_THRESHOLD.
     Met à jour le score et maintient les plateformes visibles.
     """
-    # Lorsque le Doodle dépasse le seuil de caméra, il doit rester
-    # visuellement au seuil pendant que les plateformes sont déplacées vers
-    # le bas de la même distance.
-    #
-    # Le score doit représenter la distance verticale ainsi parcourue et le
-    # meilleur score doit être mis à jour. Les plateformes sorties sous
-    # l'écran doivent être retirées, puis de nouvelles plateformes générées.
+
 
     if doodle_dict["y"] < CAMERA_SCROLL_THRESHOLD: #lorsque le doodle est plus haut que le seuil de caméra
         defilement = CAMERA_SCROLL_THRESHOLD - doodle_dict["y"] #calcule distance de défilement nécessaire pour prochaines étapes
@@ -166,7 +150,7 @@ def scroll_camera():
         doodle_dict["y"] = CAMERA_SCROLL_THRESHOLD #repositionne le doodle au seuil de caméra
         doodle_dict["score"] += defilement # mise à jour du score selon le défilement vertical
         
-        if doodle_dict["score"] > doodle_dict["high_score"]: # si le score est plus grand que high score, 
+        if doodle_dict["score"] > doodle_dict["high_score"]: # si le score est plus grand que high score précédent, 
             doodle_dict["high_score"] = doodle_dict["score"] # high score est mis à jour
         
                 
